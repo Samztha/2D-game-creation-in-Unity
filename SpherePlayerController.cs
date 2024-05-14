@@ -118,24 +118,6 @@ public class SpherePlayerController : MonoBehaviour
         }
     }
 
-    // Checks if the player is touching the floor, making it possible to jump
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("Floor"))
-        {
-            isJumping = false;
-        }
-    }
-
-    // Checks if the player is not touching the floor, making it impossible to jump 
-    private void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.CompareTag("Floor"))
-        {
-            isJumping = true;
-        }
-    }
-
     // Function to update the displayed count of "PointSphere" objects collected
     void SetCountText()
     {
