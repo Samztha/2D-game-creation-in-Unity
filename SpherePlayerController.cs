@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class SpherePlayerController : MonoBehaviour
 {
-    [SerializeField] private GameObject pivot;
-
     // Rigidbody of the player
     private Rigidbody rb;
 
@@ -20,29 +18,8 @@ public class SpherePlayerController : MonoBehaviour
     // Movement along X axis
     private float movementX;
 
-    //
-    private float Move;
-
-    //
-    private bool isDragging;
-
-    //
-    private bool canDrag;
-
-    //
-    private SpringJoint springJoint;
-
-    //
-    private Camera main;
-
     // Speed at which the player moves
     public float speed = 0;
-
-    //
-    public float jump;
-
-    //
-    public bool isJumping;
 
     // UI text component to display count of "PickUp" objects collected
     public TextMeshProUGUI countText;
@@ -68,15 +45,6 @@ public class SpherePlayerController : MonoBehaviour
         // Get and store the Rigidbody component attached to the player
         rb = GetComponent<Rigidbody>();
 
-        //
-        springJoint = GetComponent<SpringJoint>();
-
-        //
-        canDrag = true;
-
-        //
-        main = Camera.main;
-
         // Initialize count to zero
         count = 0;
 
@@ -95,42 +63,6 @@ public class SpherePlayerController : MonoBehaviour
         movementX = movementVector.x;
     }
 
-    private void DetectTouch()
-    {
-        // If screen isnt being touched
-        if (!Touchscreen.current.primaryTouch.press.isPressed)
-        {
-            // If screen was touched
-            if (isDragging)
-            {
-                LaunchPlayer();
-            }
-            isDragging = false;
-            return;
-        }
-
-        if (canDrag)
-        {
-            isDragging = true;
-            rb.isKinematic = true;
-
-            // Get position of touch in pixels
-            Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
-            // Convert position from pixels to world
-            Vector3 worldPosition = main.ScreenToWorldPoint(touchPosition);
-            worldPosition.z = transform.position.z;
-
-            // Set player position to finger
-            transform.position = worldPosition;
-        }
-    }
-
-    private void LaunchBall()
-    {
-        rb.isKinematic = false;
-        canDrag = false;
-    }
-
     // FixedUpdate is called once per fixed frame-rate frame
     private void FixedUpdate()
     {
@@ -138,16 +70,7 @@ public class SpherePlayerController : MonoBehaviour
         {
             // Create a 3D movement vector using the X input
             Vector3 movement = new Vector3(movementX, 0.0f);
-
-            // 
-            Move = Input.GetAxis("Horizontal");
-
-            // Makes the character jump when pressing the space bar, and it wont jump if the character is mid air
-            if (Input.GetButtonDown("Jump") && isJumping == false)
-            {
-                rb.AddForce(new Vector2(rb.velocity.x, jump));
-            }
-
+            
             // Apply force to the Rigidbody to move the player
             rb.AddForce(movement * speed);
         }
